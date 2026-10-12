@@ -9,6 +9,12 @@ Tie all modules together to run the campus navigator:
 5. Call display_route() to show the result.
 """
 
+import os
+import sys
+
+# Ensure src directory is in sys.path when executed directly or from parent directory
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from locations import get_locations
 from routes import ROUTES
 from navigator import find_shortest_route
@@ -20,19 +26,51 @@ def main():
     print("       SVECW CAMPUS NAVIGATOR")
     print("========================================")
 
-    # TODO: 1. Get locations from get_locations()
-    
-    # TODO: 2. Print available locations
-    
-    # TODO: 3. Ask the user for 'source' and 'destination'
-    
-    # TODO: 4. Add Input Validation 
-    # (e.g., handle invalid location, source == destination)
+    # 1. Get locations from get_locations()
+    locations = get_locations()
 
-    # TODO: 5. Call find_shortest_route(ROUTES, source, destination)
-    
-    # TODO: 6. Call display_route(route, distance)
-    pass
+    # 2. Print available locations
+    print("\nAvailable Locations:")
+    for loc in locations:
+        print(f"- {loc}")
+    print()
+
+    # 3. Ask the user for 'source' and 'destination'
+    try:
+        source_input = input("Enter source: ").strip()
+        destination_input = input("Enter destination: ").strip()
+    except (KeyboardInterrupt, EOFError):
+        print("\n\nOperation cancelled.")
+        return
+
+    # 4. Add Input Validation
+    if not source_input or not destination_input:
+        print("\nError: Source and destination cannot be empty.")
+        return
+
+    # Case-insensitive lookup mapping user input to canonical location name
+    location_map = {loc.lower(): loc for loc in locations}
+    source = location_map.get(source_input.lower())
+    destination = location_map.get(destination_input.lower())
+
+    if not source:
+        print(f"\nError: Location '{source_input}' is not a valid campus location.")
+        return
+
+    if not destination:
+        print(f"\nError: Location '{destination_input}' is not a valid campus location.")
+        return
+
+    if source == destination:
+        print(f"\nSource and destination are the same ({source}).")
+        print("Total distance: 0 m")
+        return
+
+    # 5. Call find_shortest_route(ROUTES, source, destination)
+    route, distance = find_shortest_route(ROUTES, source, destination)
+
+    # 6. Call display_route(route, distance)
+    display_route(route, distance)
 
 
 if __name__ == "__main__":

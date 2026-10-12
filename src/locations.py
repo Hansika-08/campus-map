@@ -14,7 +14,17 @@ LOCATIONS = [
 
 # Define the campus locations list
 LOCATIONS = [
-    # Add locations here
+    "Main Gate",
+    "CSE Block",
+    "ECE Block",
+    "Mechanical Block",
+    "Civil Block",
+    "Library",
+    "Auditorium",
+    "Canteen",
+    "Hostel Block",
+    "Sports Complex",
+    "Admin Block",
 ]
 
 
@@ -22,7 +32,6 @@ def get_locations():
     """
     Returns the list of all valid locations on campus.
     """
-    # TODO: Return the LOCATIONS list
-    pass
+    return LOCATIONS
 
 
